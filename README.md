@@ -2,7 +2,6 @@
 
 Rawda is a responsive front-end web application developed as part of the SWE363 course project. The platform is designed to assist home gardeners by providing an organized and user-friendly digital environment where they can manage plants, receive reminders, access plant-care guidance, communicate with gardening services, and interact with helpful smart features.
 
-The project focuses on front-end implementation, interface usability, and responsive navigation while simulating the experience of a complete smart gardening assistant.
 
 ---
 
