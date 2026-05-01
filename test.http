@@ -59,3 +59,7 @@ Content-Type: application/json
   "email": "Raghada@gmail.com",
   "password": "123456"
 }
+###
+GET http://localhost:5050/api/users
+###
+GET http://localhost:5050/api/users
