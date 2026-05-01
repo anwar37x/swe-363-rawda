@@ -1,0 +1,61 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=WebStorm
+
+###
+POST http://localhost:5050/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Somia",
+  "email": "Somia2@gmail.com",
+  "password": "123456",
+  "role": "expert"
+}
+
+###
+
+POST http://localhost:5050/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Sadeem",
+  "email": "Sadeem@gmail.com",
+  "password": "123456",
+  "role": "gardener"
+}
+
+###
+
+POST http://localhost:5050/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Anwar",
+  "email": "Anwar@gmail.com",
+  "password": "123456",
+  "role": "store"
+}
+
+###
+
+POST http://localhost:5050/api/auth/register
+Content-Type: application/json
+
+{
+
+  "name": "Raghada",
+  "email": "Raghada@gmail.com",
+  "password": "123456",
+  "role": "admin"
+}
+
+
+### LOGIN
+POST http://localhost:5050/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "Raghada@gmail.com",
+  "password": "123456"
+}
