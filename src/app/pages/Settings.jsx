@@ -5,9 +5,14 @@ import { useNavigate } from "react-router";
 
 export default function Settings() {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const [activeTab, setActiveTab] = useState("Profile");
   const [toast, setToast] = useState(null);
-  const [profileData, setProfileData] = useState({ name: "Dr. Sarah", email: "sarah@rawda.app", bio: "Passionate botanist with over 15 years of experience in horticulture. Specialized in urban gardening and sustainable plant care." });
+  const [profileData, setProfileData] = useState({
+    name: user.name || "",
+    email: user.email || "",
+    bio: "",
+  });
   const [notifications, setNotifications] = useState({ replies: true, summary: true, badges: true, newsletter: false });
   const [passwordData, setPasswordData] = useState({ current: "", newPass: "", confirm: "" });
   const [errors, setErrors] = useState({});
@@ -42,6 +47,8 @@ export default function Settings() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/expert/login");
   };
 
@@ -78,8 +85,8 @@ export default function Settings() {
             <div className="space-y-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Public Profile</h2>
               <div className="flex items-center gap-6">
-                <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden border-4 border-white shadow-md">
-                  <img src="https://images.unsplash.com/photo-1762522926157-bcc04bf0b10a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9maWxlJTIwcG9ydHJhaXQlMjBwcm9mZXNzaW9uYWwlMjBzbWlsaW5nfGVufDF8fHx8MTc3MjMyMDgxOHww&ixlib=rb-4.1.0&q=80&w=1080" className="w-full h-full object-cover" alt="Profile" />
+                <div className="w-24 h-24 rounded-full bg-green-500 text-white flex items-center justify-center text-3xl font-bold shadow-md">
+                  {profileData.name?.charAt(0) || "E"}
                 </div>
                 <div>
                   <Button variant="outline" className="border-gray-200 text-gray-700 mb-2">Change Picture</Button>
@@ -115,6 +122,7 @@ export default function Settings() {
                 <textarea
                   value={profileData.bio}
                   onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
+                  placeholder="Tell us about yourself..."
                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 h-24"
                 />
               </div>

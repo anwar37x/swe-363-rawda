@@ -16,22 +16,38 @@ export default function ExpertLogin() {
     setError("");
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      // Demo credentials
-      if (email === "expert@rawda.com" && password === "expert123") {
-        showToast("Login Successfully");
-        setTimeout(() => {
-          navigate("/expert");
-        }, 1000);
-      } else if (email === "disabled@example.com") {
-        setError("Error, Contact Support");
+    try {
+      const res = await fetch("http://localhost:5050/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Invalid email/password");
         setIsLoading(false);
-      } else {
-        setError("Invalid email/password");
-        setIsLoading(false);
+        return;
       }
-    }, 1500);
+
+      if (data.user.role !== "expert") {
+        setError("Access denied. Experts only.");
+        setIsLoading(false);
+        return;
+      }
+
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+
+      showToast("Login Successfully");
+      setTimeout(() => navigate("/expert"), 1000);
+
+    } catch (error) {
+      setError("Server error. Make sure backend is running.");
+    }
+
+    setIsLoading(false);
   };
 
   const showToast = (message) => {
@@ -42,7 +58,6 @@ export default function ExpertLogin() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo & Title */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-[#4CAF50] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
             <span className="text-3xl">🎓</span>
@@ -51,10 +66,8 @@ export default function ExpertLogin() {
           <p className="text-gray-600">Sign in to share your gardening expertise</p>
         </div>
 
-        {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <form onSubmit={handleLogin} className="space-y-6">
-            {/* Email Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
@@ -69,7 +82,6 @@ export default function ExpertLogin() {
               />
             </div>
 
-            {/* Password Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
@@ -93,14 +105,12 @@ export default function ExpertLogin() {
               </div>
             </div>
 
-            {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                 <p className="text-red-700 text-sm text-center">{error}</p>
               </div>
             )}
 
-            {/* Login Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -117,16 +127,14 @@ export default function ExpertLogin() {
             </button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center mb-2">Demo credentials:</p>
-            <div className="bg-gray-50 rounded-lg p-3 text-xs font-mono text-gray-700">
-              <p>Email: <span className="font-semibold">expert@rawda.com</span></p>
-              <p>Password: <span className="font-semibold">expert123</span></p>
-            </div>
-          </div>
+         <div className="mt-6 pt-6 border-t border-gray-200">
+  <p className="text-xs text-gray-500 text-center mb-2">Use your MongoDB account:</p>
+  <div className="bg-gray-50 rounded-lg p-3 text-xs font-mono text-gray-700">
+    <p>Email: <span className="font-semibold">your_email@gmail.com</span></p>
+    <p>Password: <span className="font-semibold">your_password</span></p>
+  </div>
+</div>
 
-          {/* Back to Home */}
           <div className="mt-6 text-center">
             <button
               onClick={() => navigate("/")}
@@ -138,7 +146,6 @@ export default function ExpertLogin() {
         </div>
       </div>
 
-      {/* Toast Notification */}
       {toast && (
         <div className="fixed top-8 right-8 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in z-50">
           ✓ {toast}
@@ -147,5 +154,3 @@ export default function ExpertLogin() {
     </div>
   );
 }
-
-

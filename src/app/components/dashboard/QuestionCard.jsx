@@ -1,11 +1,16 @@
 import React from "react";
 import { Clock, ThumbsUp } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const QuestionCard = ({ question }) => {
-  const { title, author, postedAt, tags, likes } = question || {};
+  const { title, author, postedAt, tags, likes, id, _id } = question || {};
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-white border p-4 rounded-lg flex flex-col gap-3">
+    <div
+      onClick={() => navigate(`/expert/question/${id || _id}`)}
+      className="bg-white border p-4 rounded-lg flex flex-col gap-3 cursor-pointer hover:shadow-md transition-shadow"
+    >
       <h3 className="font-semibold text-gray-800 text-base">{title}</h3>
 
       <div className="flex items-center text-sm text-gray-500 gap-4">
@@ -41,4 +46,3 @@ const QuestionCard = ({ question }) => {
 };
 
 export default QuestionCard;
-

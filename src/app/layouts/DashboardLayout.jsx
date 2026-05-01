@@ -4,6 +4,7 @@ import { LayoutDashboard, MessageSquare, Star, Users, Calendar, Settings, LogOut
 export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const isActive = (path) => {
     if (path === "/expert" && location.pathname === "/expert") return true;
@@ -19,6 +20,12 @@ export default function DashboardLayout() {
     { path: "/expert/submit", label: "Schedule", icon: Calendar },
     { path: "/expert/settings", label: "Settings", icon: Settings },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("/expert/login");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -49,15 +56,15 @@ export default function DashboardLayout() {
               </button>
               <div className="hidden sm:flex items-center gap-3">
                 <div className="h-8 w-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-medium">
-                  S
+                  {user.name?.charAt(0) || "E"}
                 </div>
                 <div className="text-left leading-tight">
-                  <p className="text-sm font-medium text-gray-900">Sadeem</p>
-                  <p className="text-xs text-gray-500">Expert</p>
+                  <p className="text-sm font-medium text-gray-900">{user.name || "Expert"}</p>
+                  <p className="text-xs text-gray-500 capitalize">{user.role || "Expert"}</p>
                 </div>
               </div>
               <button
-                onClick={() => navigate("/expert/login")}
+                onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 transition-colors"
               >
                 <LogOut className="w-5 h-5" />

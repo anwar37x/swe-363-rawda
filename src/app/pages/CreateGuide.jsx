@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../components/ui/Button";
-import { ArrowLeft, UploadCloud, FileText, Image, Save } from "lucide-react";
+import { ArrowLeft, UploadCloud, FileText, Image, Save, Loader2 } from "lucide-react";
 
 export default function CreateGuide() {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ export default function CreateGuide() {
   const [content, setContent] = useState("");
   const [toast, setToast] = useState(null);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const showToast = (message) => {
     setToast(message);
@@ -34,13 +35,41 @@ export default function CreateGuide() {
     showToast("Draft saved successfully!");
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!validate()) {
       showToast("Please fill in all required fields.");
       return;
     }
-    showToast("Guide published successfully!");
-    setTimeout(() => navigate("/expert"), 1500);
+
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5050/api/guides", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, content, category, difficulty }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showToast(data.message || "Failed to publish guide.");
+        return;
+      }
+
+      showToast("Guide published successfully!");
+      setTimeout(() => navigate("/expert"), 1500);
+
+    } catch (err) {
+      showToast("Server error. Make sure backend is running.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,15 +90,27 @@ export default function CreateGuide() {
               <Button variant="ghost" onClick={handleSaveDraft} className="text-gray-500 hover:text-gray-900">
                 <Save size={18} className="mr-2" /> Save Draft
               </Button>
-              <Button onClick={handlePublish} className="bg-[#4CAF50] hover:bg-[#43A047] text-white">
-                Publish Guide
+              <Button
+                onClick={handlePublish}
+                disabled={isLoading}
+                className="bg-[#4CAF50] hover:bg-[#43A047] text-white disabled:bg-gray-300"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 size={16} className="mr-2 animate-spin" /> Publishing...
+                  </>
+                ) : (
+                  "Publish Guide"
+                )}
               </Button>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Guide Title <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-gray-700">
+                Guide Title <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 value={title}
@@ -82,7 +123,9 @@ export default function CreateGuide() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Category <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Category <span className="text-red-500">*</span>
+                </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
@@ -112,7 +155,9 @@ export default function CreateGuide() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Guide Content <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-gray-700">
+                Guide Content <span className="text-red-500">*</span>
+              </label>
               <div className={`border rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-green-100 focus-within:border-green-500 transition-all ${errors.content ? "border-red-500" : "border-gray-200"}`}>
                 <div className="bg-gray-50 border-b border-gray-200 p-2 flex items-center gap-2">
                   <button onClick={() => setContent((prev) => prev + "**bold**")} className="h-8 w-8 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded flex items-center justify-center font-bold font-serif">B</button>
