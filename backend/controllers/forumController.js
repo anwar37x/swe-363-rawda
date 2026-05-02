@@ -1,5 +1,4 @@
-const Question = require("../models/Question");
-
+const Question = require("../models/Questions");
 exports.getReportedPosts = async (req, res) => {
     try {
         const posts = await Question.find({ reports: { $gt: 0 } })
