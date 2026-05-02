@@ -3,14 +3,32 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const {
+      name,
+      email,
+      password,
+      role,
+      yearsExperience,
+      bio,
+      certificates,
+      expertStatus,
+    } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    const user = await User.create({ name, email, password, role });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role,
+      yearsExperience,
+      bio,
+      certificates,
+      expertStatus,
+    });
 
     const token = jwt.sign(
       { id: user._id, role: user.role },

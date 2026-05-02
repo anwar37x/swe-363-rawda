@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+
         email: {
             type: String,
             required: true,
@@ -14,19 +15,44 @@ const userSchema = new mongoose.Schema(
             lowercase: true,
             trim: true,
         },
+
         password: {
             type: String,
             required: true,
         },
+
         role: {
             type: String,
             enum: ["admin", "gardener", "expert", "store"],
             default: "gardener",
         },
+
         status: {
             type: String,
             enum: ["Active", "Inactive"],
             default: "Active",
+        },
+
+        // Expert application fields
+        yearsExperience: {
+            type: Number,
+            default: 0,
+        },
+
+        bio: {
+            type: String,
+            default: "",
+        },
+
+        certificates: {
+            type: [String],
+            default: [],
+        },
+
+        expertStatus: {
+            type: String,
+            enum: ["Pending", "Approved", "Rejected"],
+            default: "Pending",
         },
     },
     { timestamps: true }
