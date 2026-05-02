@@ -26,7 +26,9 @@ const reviewRoutes   = require("./routes/reviews");
 const chatRoutes     = require("./routes/chat");
 const subscriptionRoutes = require("./routes/subscriptions");
 const badgeRoutes        = require("./routes/badges");
+const productRoutes = require("./routes/products");
 
+app.use("/api/products",  productRoutes);
 app.use("/api/auth",      authRoutes);
 app.use("/api/users",     userRoutes);
 app.use("/api/questions", questionRoutes);
@@ -36,7 +38,7 @@ app.use("/api/experts",   expertRoutes);
 app.use("/api/forum",     forumRoutes);
 app.use("/api/reviews",   reviewRoutes);
 app.use("/api/chat",      chatRoutes);
-
+app.use("/api/products", require("./routes/products"));
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/badges", badgeRoutes);
 
