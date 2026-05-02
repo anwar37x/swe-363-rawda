@@ -42,7 +42,13 @@ app.use("/api/products", require("./routes/products"));
 
 app.use("/api/services", require("./routes/services"));
 app.use("/api/stores", require("./routes/stores"));
+// server.js
 
+
+app.use(
+"/api/service-requests",
+require("./routes/serviceRequests")
+);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/badges", badgeRoutes);
 
