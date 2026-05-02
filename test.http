@@ -117,3 +117,12 @@ Authorization: Bearer YOUR_TOKEN_HERE
   "content": "I have been growing tomatoes for 3 weeks and the bottom leaves are turning yellow. I water them every other day. Is this normal?",
   "tags": ["tomatoes", "outdoor", "watering"]
 }
+
+###
+GET http://localhost:5050/api/users
+
+###
+GET http://localhost:5050/api/questions
+
+###
+GET http://localhost:5050/api/guides

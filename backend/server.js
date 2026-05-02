@@ -24,6 +24,8 @@ const expertRoutes   = require("./routes/experts");
 const forumRoutes    = require("./routes/forum");
 const reviewRoutes   = require("./routes/reviews");
 const chatRoutes     = require("./routes/chat");
+const subscriptionRoutes = require("./routes/subscriptions");
+const badgeRoutes        = require("./routes/badges");
 
 app.use("/api/auth",      authRoutes);
 app.use("/api/users",     userRoutes);
@@ -34,6 +36,9 @@ app.use("/api/experts",   expertRoutes);
 app.use("/api/forum",     forumRoutes);
 app.use("/api/reviews",   reviewRoutes);
 app.use("/api/chat",      chatRoutes);
+
+app.use("/api/subscriptions", subscriptionRoutes);
+app.use("/api/badges", badgeRoutes);
 
 app.get("/", (req, res) => res.send("Rawda API is running 🌿"));
 

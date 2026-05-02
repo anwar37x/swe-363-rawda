@@ -1,29 +1,23 @@
 const express = require("express");
-const router  = express.Router();
+const router = express.Router();
+const Question = require("../models/Questions");
 
-const {
-  getQuestions,
-  getQuestionById,
-  createQuestion,
-  likeQuestion,
-  bookmarkQuestion,
-  likeAnswer,
-  answerQuestion,
-  verifyAnswer,
-} = require("../controllers/questionController");
+router.get("/", async (req, res) => {
+  try {
+    const questions = await Question.find().sort({ createdAt: -1 });
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to get questions" });
+  }
+});
 
-const { protect }   = require("../middleware/auth");
-const { roleCheck } = require("../middleware/roleCheck");
-
-router.get("/",    getQuestions);
-router.get("/:id", getQuestionById);
-
-router.post("/",                protect, createQuestion);
-router.post("/:id/like",        protect, likeQuestion);
-router.post("/:id/bookmark",    protect, bookmarkQuestion);
-
-router.post("/:id/answers",                           protect, roleCheck("expert", "admin"), answerQuestion);
-router.post("/:questionId/answers/:answerId/like",    protect, likeAnswer);
-router.put("/:questionId/answers/:answerId/verify",   protect, roleCheck("expert", "admin"), verifyAnswer);
+router.post("/", async (req, res) => {
+  try {
+    const question = await Question.create(req.body);
+    res.status(201).json(question);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 module.exports = router;
