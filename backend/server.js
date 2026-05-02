@@ -39,6 +39,9 @@ app.use("/api/forum",     forumRoutes);
 app.use("/api/reviews",   reviewRoutes);
 app.use("/api/chat",      chatRoutes);
 app.use("/api/products", require("./routes/products"));
+
+app.use("/api/services", require("./routes/services"));
+
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/badges", badgeRoutes);
 
