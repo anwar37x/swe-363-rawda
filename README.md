@@ -55,7 +55,7 @@ cd SWE-363-Rawda
 
 ### 2. Frontend Setup
 ```bash
-npm install
+npm install axios
 npm run dev
 ```
 Open: http://localhost:5173
